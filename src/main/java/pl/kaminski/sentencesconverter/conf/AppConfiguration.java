@@ -1,4 +1,4 @@
-package pl.kaminski.sentencesconverter;
+package pl.kaminski.sentencesconverter.conf;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecutionListener;
@@ -9,6 +9,8 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
+import org.springframework.batch.item.ItemWriter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import pl.kaminski.sentencesconverter.model.Sentence;
@@ -22,6 +24,9 @@ import java.util.List;
 @EnableBatchProcessing
 public class AppConfiguration {
 
+    @Value("${output.type}")
+    private String outputType;
+
     @Bean
     public Job convertSentencesJob(JobBuilderFactory jobs, Step step, JobExecutionListener listener) {
         return jobs.get("convertSentencesJob")
@@ -33,11 +38,12 @@ public class AppConfiguration {
     }
 
     @Bean
-    public Step convertSentencesStep(StepBuilderFactory stepBuilderFactory, ItemReader<List<String>> reader, ItemProcessor<List<String>, Sentence> processor) {
+    public Step convertSentencesStep(StepBuilderFactory stepBuilderFactory, ItemReader<List<String>> reader, ItemProcessor<List<String>, Sentence> processor, ItemWriter<Sentence> writer) {
         return stepBuilderFactory.get("convertSentencesStep")
                 .<List<String>, Sentence> chunk(1)
                 .reader(reader)
                 .processor(processor)
+                .writer(writer)
                 .build();
     }
 

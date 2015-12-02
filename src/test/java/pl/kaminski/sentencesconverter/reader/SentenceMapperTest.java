@@ -1,5 +1,6 @@
 package pl.kaminski.sentencesconverter.reader;
 
+import com.google.common.base.Stopwatch;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Assert;
@@ -8,6 +9,7 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.*;
 
@@ -30,9 +32,12 @@ public class SentenceMapperTest {
 
     @Test
     public void testMapLine() throws Exception {
+        logger.debug("Run test: " + SentenceMapperTest.class);
         SentenceMapper sentenceMapper = new SentenceMapper();
+        Stopwatch timer = Stopwatch.createStarted();
         String[] strings = sentenceMapper.mapLine(sampleText, 1).toArray(new String[]{});
-        logger.debug(Arrays.toString(strings));
+        timer.stop();
         Assert.assertArrayEquals(expectedStrings, strings);
+        logger.debug("Test: " + SentenceMapperTest.class + " succeed in " + timer.elapsed(TimeUnit.MILLISECONDS) + " milliseconds.");
     }
 }
