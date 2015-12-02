@@ -8,10 +8,6 @@ import pl.kaminski.sentencesconverter.OutputType;
 import pl.kaminski.sentencesconverter.SentencesConverter;
 
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by Paweł Kamiński.

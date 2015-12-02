@@ -27,19 +27,8 @@ public class SentenceTest {
     }
 
     @Test
-    public void testGetWords() throws Exception {
-        System.out.println(firstSentence.getWords());
-        System.out.println(secondSentence.getWords());
-    }
-
-    @Test
     public void testGetNumberOfWords() throws Exception {
         Assert.assertSame(5, firstSentence.getNumberOfWords());
         Assert.assertSame(8, secondSentence.getNumberOfWords());
-    }
-
-    @Test
-    public void testGetSentenceNumber() throws Exception {
-
     }
 }
