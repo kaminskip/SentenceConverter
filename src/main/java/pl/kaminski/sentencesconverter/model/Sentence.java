@@ -13,18 +13,25 @@ public class Sentence {
 
     private long sentenceNumber = 0;
 
-    private static long numberOfSentences = 0;
-
-    private List<Word> words;
+    private final List<Word> words;
 
     private Sentence(Builder builder) {
         this.words = builder.words;
+        this.sentenceNumber = builder.sentenceNumber;
+    }
+
+    public List<Word> getSortedWords(){
+        List<Word> wordList = new ArrayList<>(this.words);
+        Collections.sort(wordList);
+        return wordList;
+    }
+
+    public void orderWords(){
         Collections.sort(this.words);
-        this.sentenceNumber = numberOfSentences;
     }
 
     public List<Word> getWords(){
-        return words;
+        return this.words;
     }
 
     public int getNumberOfWords(){
@@ -39,8 +46,10 @@ public class Sentence {
 
         private List<Word> words = new ArrayList<>(5);
 
-        public Builder() {
-            numberOfSentences++;
+        private int sentenceNumber;
+
+        public Builder(int sentenceNumber) {
+            this.sentenceNumber = sentenceNumber;
         }
 
         public Builder addWord(String word){

@@ -14,17 +14,17 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
+import pl.kaminski.sentencesconverter.model.Sentence;
 
 import java.nio.charset.Charset;
-import java.util.List;
 import java.util.Scanner;
 
 /**
  * Created by Paweł Kamiński.
  */
 @Component
-public class SentenceReader extends AbstractItemCountingItemStreamItemReader<List<String>> implements
-        ResourceAwareItemReaderItemStream<List<String>>, InitializingBean {
+public class SentenceReader extends AbstractItemCountingItemStreamItemReader<Sentence> implements
+        ResourceAwareItemReaderItemStream<Sentence>, InitializingBean {
 
     @Value("${input.filename}")
     private String inputFileName;
@@ -54,10 +54,10 @@ public class SentenceReader extends AbstractItemCountingItemStreamItemReader<Lis
     }
 
     @Autowired
-    private LineMapper<List<String>> lineMapper;
+    private LineMapper<Sentence> lineMapper;
 
     @Override
-    protected List<String> doRead() throws Exception {
+    protected Sentence doRead() throws Exception {
         if (noInput) {
             return null;
         }
@@ -139,7 +139,7 @@ public class SentenceReader extends AbstractItemCountingItemStreamItemReader<Lis
      * Setter for line mapper. This property is required to be set.
      * @param lineMapper maps line to item
      */
-    public void setLineMapper(LineMapper<List<String>> lineMapper) {
+    public void setLineMapper(LineMapper<Sentence> lineMapper) {
         this.lineMapper = lineMapper;
     }
 }

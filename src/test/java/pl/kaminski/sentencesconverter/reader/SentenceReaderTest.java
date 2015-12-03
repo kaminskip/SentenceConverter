@@ -8,6 +8,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.core.io.ClassPathResource;
+import pl.kaminski.sentencesconverter.model.Sentence;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,8 +36,8 @@ public class SentenceReaderTest {
 
     @Test
     public void testDoRead() throws Exception {
-        List<List<String>> sentences = new ArrayList<>();
-        List<String> sentence;
+        List<Sentence> sentences = new ArrayList<>();
+        Sentence sentence;
         logger.debug("Run test: " + SentenceReaderTest.class);
         Stopwatch timer = Stopwatch.createStarted();
         while((sentence = sentenceReader.doRead()) != null) {
@@ -45,7 +46,7 @@ public class SentenceReaderTest {
         timer.stop();
         Assert.assertSame(13, sentences.size());
         for (int i = 0; i < sentencesSizes.length;i++){
-            Assert.assertSame("Sentence " + (i + 1) + " do not have " + sentencesSizes[i] + " words.", sentencesSizes[i], sentences.get(i).size());
+            Assert.assertSame("Sentence " + (i + 1) + " do not have " + sentencesSizes[i] + " words.", sentencesSizes[i], sentences.get(i).getNumberOfWords());
         }
         logger.debug("Test: " + SentenceReaderTest.class + " succeed in " + timer.elapsed(TimeUnit.MILLISECONDS) + " milliseconds.");
     }

@@ -31,7 +31,7 @@ public class CSVLineAggregatorTest {
     public void testAggregate() throws Exception {
         logger.debug("Run test: " + CSVLineAggregatorTest.class);
         Stopwatch timer = Stopwatch.createStarted();
-        Sentence sentence = new Sentence.Builder().addWord("b").addWord("a").addWord("c").build();
+        Sentence sentence = new Sentence.Builder(1).addWord("b").addWord("a").addWord("c").build();
         String aggregated = lineAggregator.aggregate(sentence);
         timer.stop();
         Assert.assertEquals("Sentence 1, a, b, c", aggregated);

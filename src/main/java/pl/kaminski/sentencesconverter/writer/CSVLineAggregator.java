@@ -15,6 +15,6 @@ public class CSVLineAggregator implements LineAggregator<Sentence> {
 
     @Override
     public String aggregate(Sentence item) {
-        return MessageFormat.format(SENTENCE, item.getSentenceNumber()) + Joiner.on(", ").join(item.getWords());
+        return MessageFormat.format(SENTENCE, item.getSentenceNumber()) + Joiner.on(", ").join(item.getSortedWords());
     }
 }

@@ -15,8 +15,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import pl.kaminski.sentencesconverter.model.Sentence;
 
-import java.util.List;
-
 /**
  * Created by Paweł Kamiński.
  */
@@ -38,9 +36,9 @@ public class AppConfiguration {
     }
 
     @Bean
-    public Step convertSentencesStep(StepBuilderFactory stepBuilderFactory, ItemReader<List<String>> reader, ItemProcessor<List<String>, Sentence> processor, ItemWriter<Sentence> writer) {
+    public Step convertSentencesStep(StepBuilderFactory stepBuilderFactory, ItemReader<Sentence> reader, ItemProcessor<Sentence, Sentence> processor, ItemWriter<Sentence> writer) {
         return stepBuilderFactory.get("convertSentencesStep")
-                .<List<String>, Sentence> chunk(1)
+                .<Sentence, Sentence> chunk(5)
                 .reader(reader)
                 .processor(processor)
                 .writer(writer)

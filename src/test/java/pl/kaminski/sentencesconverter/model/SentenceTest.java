@@ -17,11 +17,11 @@ public class SentenceTest {
 
     @Before
     public void setUp() throws Exception {
-        firstSentence = new Sentence.Builder()
+        firstSentence = new Sentence.Builder(1)
                 .addWord("Marry").addWord("had").addWord("a").addWord("little")
                 .addWord("lamb").build();
 
-        secondSentence = new Sentence.Builder()
+        secondSentence = new Sentence.Builder(2)
                 .addWord("Peter").addWord("called").addWord("for").addWord("the")
                 .addWord("wolf").addWord("and").addWord("Aesop").addWord("came").build();
     }
