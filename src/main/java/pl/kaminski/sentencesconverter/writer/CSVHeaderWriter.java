@@ -1,22 +1,17 @@
 package pl.kaminski.sentencesconverter.writer;
 
-import com.google.common.base.Joiner;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.batch.item.file.FlatFileItemWriter;
-import org.springframework.batch.item.file.ResourceAwareItemWriterItemStream;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ClassUtils;
 import pl.kaminski.sentencesconverter.context.ReadingSentencesContext;
-import pl.kaminski.sentencesconverter.model.Sentence;
 
-import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.io.*;
+import java.nio.file.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -34,7 +29,17 @@ public class CSVHeaderWriter implements InitializingBean {
     @Autowired
     private ReadingSentencesContext context;
 
+    // Resource witch data
     private Resource resource;
+
+    // Path to temp file with header
+    private Path tempHeaderFilePath;
+
+    // Path to temp file with data
+    private Path tempDataFilePath;
+
+    // Path to resource file
+    private Path filePath;
 
     public CSVHeaderWriter() {
 
@@ -49,15 +54,58 @@ public class CSVHeaderWriter implements InitializingBean {
         this.resource = resource;
     }
 
+    /**
+     * Add header to resource
+     * @throws IOException
+     */
     public void addHeader() throws IOException {
-        String header = ", " + IntStream.range(0, context.getMaxWordsInSentence()).boxed()
+        prepareTempFiles(generateHeader());
+        concatenateFiles();
+    }
+
+    /**
+     * Create header with maximum words in all sentences
+     * @return header content
+     */
+    private String generateHeader(){
+        return ", " + IntStream.range(0, context.getMaxWordsInSentence()).boxed()
                 .map(i -> ("Word " + (i + 1)))
                 .collect(Collectors.joining(", ")) + "\n";
-        logger.debug("Write header: " + header);
-        RandomAccessFile file = new RandomAccessFile(resource.getFile(), "rw");
-        file.seek(0);
-        file.write(header.getBytes());
-        file.close();
+    }
+
+    /**
+     * Prepare temporary files to concatenate data
+     * @param header header to concatenate
+     * @throws IOException
+     */
+    private void prepareTempFiles(String header) throws IOException {
+        filePath = resource.getFile().toPath();
+
+        //Create temp files
+        tempHeaderFilePath = Files.createTempFile(outputFileName, ".header.tmp");
+        tempHeaderFilePath.toFile().deleteOnExit();
+        tempDataFilePath = Files.createTempFile(outputFileName, ".data.tmp");
+        tempDataFilePath.toFile().deleteOnExit();
+
+        //Copy to temp files
+        Files.write(tempHeaderFilePath, header.getBytes(), StandardOpenOption.TRUNCATE_EXISTING);
+        Files.copy(filePath, tempDataFilePath, StandardCopyOption.REPLACE_EXISTING);
+    }
+
+    /**
+     * Merge temporary files
+     * @throws IOException
+     */
+    private void concatenateFiles() throws IOException {
+        try(InputStream tempHeaderInputStream = new FileInputStream(tempHeaderFilePath.toFile());
+            InputStream tempDataInputStream = new FileInputStream(tempDataFilePath.toFile());
+            OutputStream dataOutputStream = new FileOutputStream(filePath.toFile())){
+            SequenceInputStream s = new SequenceInputStream(tempHeaderInputStream, tempDataInputStream);
+            int c;
+            while ((c = s.read()) != -1){
+                dataOutputStream.write(c);
+            }
+        }
     }
 
     public void setContext(ReadingSentencesContext context) {

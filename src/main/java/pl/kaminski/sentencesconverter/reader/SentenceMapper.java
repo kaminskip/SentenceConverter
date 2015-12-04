@@ -21,9 +21,7 @@ public class SentenceMapper implements LineMapper<Sentence> {
     public Sentence mapLine(String line, int lineNumber) throws Exception {
         List<String> wordList = Splitter.on(CharMatcher.anyOf(" ,\t\n\r:!")).trimResults().omitEmptyStrings().splitToList(line);
         Sentence.Builder builder = new Sentence.Builder(lineNumber);
-        for (String word: wordList){
-            builder.addWord(word);
-        }
+        wordList.stream().forEach(word -> builder.addWord(word));
         return builder.build();
     }
 }

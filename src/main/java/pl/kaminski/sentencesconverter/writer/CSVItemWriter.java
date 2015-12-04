@@ -1,6 +1,5 @@
 package pl.kaminski.sentencesconverter.writer;
 
-import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.item.file.FlatFileItemWriter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
