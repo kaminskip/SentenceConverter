@@ -71,6 +71,7 @@ public class SentenceReader extends AbstractItemCountingItemStreamItemReader<Sen
                     return null;
                 }
                 sentence = sentence.trim().replaceAll("\n|\r|-|\\(|\\)", " ");
+                sentence = sentence.replace("’", "'");
                 if(sentence.length() == 0){
                     return null;
                 }

@@ -17,6 +17,9 @@ public class WordTest {
         Word word3 = new Word.Builder().word("bcc").build();
         Word word3same = new Word.Builder().word("bcc").build();
 
+        Word word4 = new Word.Builder().word("abc").build();
+        Word word5 = new Word.Builder().word("Abc").build();
+
         Assert.assertSame(1, word1.compareTo(word2));
         Assert.assertSame(-1, word1.compareTo(word3));
 
@@ -26,6 +29,8 @@ public class WordTest {
         Assert.assertSame(1, word3.compareTo(word1));
         Assert.assertSame(1, word3.compareTo(word2));
         Assert.assertSame(0, word3.compareTo(word3same));
+
+        Assert.assertSame(-32, word4.compareTo(word5));
     }
 
     @Test

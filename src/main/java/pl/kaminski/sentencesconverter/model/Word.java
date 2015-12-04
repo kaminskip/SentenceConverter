@@ -15,7 +15,12 @@ public class Word implements Comparable<Word>{
 
     @Override
     public int compareTo(Word o) {
-        return this.word.toUpperCase().compareTo(o.getWord().toUpperCase());
+        int ret = this.word.compareToIgnoreCase(o.getWord());
+        if(ret == 0){
+            return o.getWord().compareTo(this.word);
+        } else {
+            return ret;
+        }
     }
 
     public String getWord(){

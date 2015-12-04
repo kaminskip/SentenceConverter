@@ -1,7 +1,6 @@
 package pl.kaminski.sentencesconverter.conf;
 
 import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
@@ -10,10 +9,12 @@ import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import pl.kaminski.sentencesconverter.model.Sentence;
+import pl.kaminski.sentencesconverter.writer.AddCSVHeaderToFileListener;
 
 /**
  * Created by Paweł Kamiński.
@@ -25,11 +26,18 @@ public class AppConfiguration {
     @Value("${output.type}")
     private String outputType;
 
+    @Autowired
+    private JobCompletionListener jobCompletionListener;
+
+    @Autowired
+    private AddCSVHeaderToFileListener addCSVHeaderToFileListener;
+
     @Bean
-    public Job convertSentencesJob(JobBuilderFactory jobs, Step step, JobExecutionListener listener) {
+    public Job convertSentencesJob(JobBuilderFactory jobs, Step step) {
         return jobs.get("convertSentencesJob")
                 .incrementer(new RunIdIncrementer())
-                .listener(listener)
+                .listener(addCSVHeaderToFileListener)
+                .listener(jobCompletionListener)
                 .flow(step)
                 .end()
                 .build();

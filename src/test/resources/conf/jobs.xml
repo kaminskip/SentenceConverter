@@ -10,6 +10,10 @@
         http://www.springframework.org/schema/context/spring-context-4.2.xsd">
 
     <batch:job id="createCSVFile">
+        <batch:listeners>
+            <batch:listener ref="jobCompletionListener"/>
+            <batch:listener ref="addCSVHeaderToFileListener"/>
+        </batch:listeners>
         <batch:step id="step1">
             <batch:tasklet>
                 <batch:chunk reader="sentenceReader" writer="CSVItemWriter"
@@ -51,6 +55,14 @@
         <property name="jobRepository" ref="jobRepository"/>
         <property name="jobLauncher" ref="jobLauncher"/>
     </bean>
+
+    <bean id="addCSVHeaderToFileListener" class="pl.kaminski.sentencesconverter.writer.AddCSVHeaderToFileListener">
+        <property name="csvHeaderWriter" ref="csvHeaderWriter"/>
+    </bean>
+
+    <bean id="csvHeaderWriter" class="pl.kaminski.sentencesconverter.writer.CSVHeaderWriter"/>
+
+    <bean id="jobCompletionListener" class="pl.kaminski.sentencesconverter.conf.JobCompletionListener"/>
 
     <context:property-placeholder location="classpath:application.properties" />
 

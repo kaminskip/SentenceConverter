@@ -82,9 +82,9 @@ public class CSVHeaderWriter implements InitializingBean {
         filePath = resource.getFile().toPath();
 
         //Create temp files
-        tempHeaderFilePath = Files.createTempFile(outputFileName, ".header.tmp");
+        tempHeaderFilePath = Files.createTempFile("out", ".header.tmp");
         tempHeaderFilePath.toFile().deleteOnExit();
-        tempDataFilePath = Files.createTempFile(outputFileName, ".data.tmp");
+        tempDataFilePath = Files.createTempFile("out", ".data.tmp");
         tempDataFilePath.toFile().deleteOnExit();
 
         //Copy to temp files
