@@ -15,13 +15,13 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Created by Paweł Kamiński.
+ * Sentence reader test
  */
 public class SentenceReaderTest {
 
     private SentenceReader sentenceReader;
 
-    private static final Log logger = LogFactory.getLog(SentenceMapperTest.class);
+    private static final Log logger = LogFactory.getLog(SentenceReaderTest.class);
 
     private int[] sentencesSizes = new int[]{7, 12, 13, 8, 6, 20, 13, 19, 20, 28, 33, 33};
 

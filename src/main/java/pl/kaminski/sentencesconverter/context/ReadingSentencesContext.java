@@ -11,9 +11,7 @@ public class ReadingSentencesContext {
     private int maxWordsInSentence = 0;
 
     public void setSentenceWordsCount(int sentenceWordsCount){
-        if(sentenceWordsCount > this.maxWordsInSentence){
-            maxWordsInSentence = sentenceWordsCount;
-        }
+        maxWordsInSentence = sentenceWordsCount;
     }
 
     public int getMaxWordsInSentence(){

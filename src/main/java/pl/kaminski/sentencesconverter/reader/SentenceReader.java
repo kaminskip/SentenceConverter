@@ -16,6 +16,8 @@ import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 import pl.kaminski.sentencesconverter.model.Sentence;
 
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Scanner;
 
 /**
@@ -147,5 +149,28 @@ public class SentenceReader extends AbstractItemCountingItemStreamItemReader<Sen
      */
     public void setLineMapper(LineMapper<Sentence> lineMapper) {
         this.lineMapper = lineMapper;
+    }
+
+    /**
+     * Read all file and compute max words in all sentences
+     * @return maximum words in sentence
+     */
+    public int getMaxWordsInSentence() {
+        int max = 0;
+        try {
+            this.doOpen();
+            Sentence sentence;
+            while((sentence = this.doRead()) != null) {
+                int wordsInSentence = sentence.getNumberOfWords();
+                if(wordsInSentence > max){
+                    max = wordsInSentence;
+                }
+            }
+        } catch (Exception e) {
+            logger.error("Can not get max words in sentences", e);
+        } finally {
+            this.close();
+        }
+        return max;
     }
 }

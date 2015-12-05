@@ -28,7 +28,6 @@ public class SentenceProcessorTest {
     @Before
     public void setUp() throws Exception {
         sentenceProcessor = new SentenceProcessor();
-        sentenceProcessor.setReadingSentencesContext(new ReadingSentencesContext());
         Sentence.Builder builder = new Sentence.Builder(1);
         builder.addWord("Marry");
         builder.addWord("had");

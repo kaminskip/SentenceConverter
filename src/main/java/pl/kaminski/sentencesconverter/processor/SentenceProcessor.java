@@ -9,25 +9,17 @@ import pl.kaminski.sentencesconverter.context.ReadingSentencesContext;
 import pl.kaminski.sentencesconverter.model.Sentence;
 
 /**
- * Processor changing order in sentence object and persisting maximum words count
+ * Processor changing order in sentence object
  */
 @Component
 public class SentenceProcessor implements ItemProcessor<Sentence, Sentence> {
 
     private static final Logger log = LoggerFactory.getLogger(SentenceProcessor.class);
 
-    @Autowired
-    private ReadingSentencesContext readingSentencesContext;
-
     @Override
     public Sentence process(final Sentence sentence) throws Exception {
-        readingSentencesContext.setSentenceWordsCount(sentence.getNumberOfWords());
         log.debug("Process sentence " + sentence.getSentenceNumber() + " with " + sentence.getNumberOfWords() + " words.");
         sentence.orderWords();
         return sentence;
-    }
-
-    public void setReadingSentencesContext(ReadingSentencesContext readingSentencesContext) {
-        this.readingSentencesContext = readingSentencesContext;
     }
 }

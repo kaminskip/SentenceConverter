@@ -34,6 +34,9 @@ public class AppConfiguration {
     private JobCompletionListener jobCompletionListener;
 
     @Autowired
+    private SentenceChunkListener sentenceChunkListener;
+
+    @Autowired
     private AddCSVHeaderToFileListener addCSVHeaderToFileListener;
 
     @Autowired
@@ -89,20 +92,22 @@ public class AppConfiguration {
     @Bean
     public Step convertSentencesToCsvStep() {
         return stepBuilderFactory.get("convertSentencesToCsvStep")
-                .<Sentence, Sentence> chunk(5)
+                .<Sentence, Sentence> chunk(10)
                 .reader(sentenceReader)
                 .processor(sentenceProcessor)
                 .writer(csvItemWriter)
+                .listener(sentenceChunkListener)
                 .build();
     }
 
     @Bean
     public Step convertSentencesToXmlStep() {
         return stepBuilderFactory.get("convertSentencesToXmlStep")
-                .<Sentence, Sentence> chunk(5)
+                .<Sentence, Sentence> chunk(10)
                 .reader(sentenceReader)
                 .processor(sentenceProcessor)
                 .writer(xmlItemWriter)
+                .listener(sentenceChunkListener)
                 .build();
     }
 

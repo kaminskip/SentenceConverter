@@ -18,8 +18,6 @@ public class JobCompletionListener extends JobExecutionListenerSupport {
     @Override
     public void afterJob(JobExecution jobExecution) {
         if(jobExecution.getStatus() == BatchStatus.COMPLETED) {
-            log.info("Job started in: " + jobExecution.getStartTime());
-            log.info("Job finished at: " + jobExecution.getEndTime());
             log.info("JOB FINISHED!");
         }
     }

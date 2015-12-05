@@ -8,8 +8,10 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.batch.item.ExecutionContext;
+import org.springframework.batch.test.AssertFile;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import pl.kaminski.sentencesconverter.context.ReadingSentencesContext;
 import pl.kaminski.sentencesconverter.model.Sentence;
 
 import java.util.ArrayList;
@@ -35,6 +37,8 @@ public class CSVItemWriterTest {
 
     private Sentence secondSentence;
 
+    private ReadingSentencesContext context;
+
     @Before
     public void setUp() throws Exception {
         firstSentence = new Sentence.Builder(1)
@@ -49,6 +53,9 @@ public class CSVItemWriterTest {
         resource = new ClassPathResource("CSVItemWriterTest.out");
         originalResource = new ClassPathResource("CSVItemWriterTest.original.out");
         csvItemWriter.setResource(resource);
+        context = new ReadingSentencesContext();
+        context.setSentenceWordsCount(8);
+        csvItemWriter.setContext(context);
     }
 
     @After
@@ -65,8 +72,7 @@ public class CSVItemWriterTest {
         csvItemWriter.write(sentences);
         csvItemWriter.write(Stream.of(firstSentence, secondSentence).collect(Collectors.toList()));
         csvItemWriter.close();
-        Assert.assertSame(originalResource.contentLength(), resource.contentLength());
-        logger.debug("Write to file: " + resource.contentLength() + " B.");
+        AssertFile.assertFileEquals(originalResource.getFile(), resource.getFile());
         logger.debug("Test: " + CSVItemWriterTest.class + " succeed in " + timer.elapsed(TimeUnit.MILLISECONDS) + " milliseconds.");
     }
 }

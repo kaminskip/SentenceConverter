@@ -10,9 +10,7 @@
         <property name="lineMapper" ref="sentenceMapper"/>
     </bean>
 
-    <bean id="sentenceProcessor" class="pl.kaminski.sentencesconverter.processor.SentenceProcessor">
-        <property name="readingSentencesContext" ref="readingSentencesContext"/>
-    </bean>
+    <bean id="sentenceProcessor" class="pl.kaminski.sentencesconverter.processor.SentenceProcessor"/>
 
     <bean id="CSVItemWriter" class="pl.kaminski.sentencesconverter.writer.csv.CSVItemWriter" />
 
@@ -36,10 +34,9 @@
     </bean>
 
     <bean id="addCSVHeaderToFileListener" class="pl.kaminski.sentencesconverter.writer.csv.AddCSVHeaderToFileListener">
-        <property name="csvHeaderWriter" ref="csvHeaderWriter"/>
+        <property name="sentenceReader" ref="sentenceReader"/>
+        <property name="context" ref="readingSentencesContext"/>
     </bean>
-
-    <bean id="csvHeaderWriter" class="pl.kaminski.sentencesconverter.writer.csv.CSVHeaderWriter"/>
 
     <bean id="jobCompletionListener" class="pl.kaminski.sentencesconverter.conf.JobCompletionListener"/>
 

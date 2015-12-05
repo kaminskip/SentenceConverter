@@ -16,7 +16,7 @@ import java.util.function.Function;
 import static org.junit.Assert.*;
 
 /**
- * Created by Paweł Kamiński.
+ * Sentence mapper test
  */
 public class SentenceMapperTest {
 
