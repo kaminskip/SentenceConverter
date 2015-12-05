@@ -1,5 +1,6 @@
 package pl.kaminski.sentencesconverter.integration;
 
+import com.google.common.base.Stopwatch;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Assert;
@@ -16,22 +17,24 @@ import org.springframework.core.io.Resource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * Integration test
  */
-@ContextConfiguration(locations = "/conf/jobs.xml")
+@ContextConfiguration(locations = {"/conf/context.xml", "/conf/csvJob.xml"})
 @RunWith(SpringJUnit4ClassRunner.class)
-public class CreateCSVFileTest {
+public class ConvertSmallCSVFileTest {
 
-    private static final Log logger = LogFactory.getLog(CreateCSVFileTest.class);
+    private static final Log logger = LogFactory.getLog(ConvertSmallCSVFileTest.class);
 
     @Autowired
     private JobLauncherTestUtils jobLauncherTestUtils;
 
-    @Value("${output.reference.filename}")
+    @Value("${output.csv.reference.filename}")
     private String outputRefFileName;
 
-    @Value("${output.filename}")
+    @Value("${output.csv.filename}")
     private String outputFileName;
 
     private Resource resource;
@@ -46,11 +49,14 @@ public class CreateCSVFileTest {
 
     @Test
     public void testJob() throws Exception {
+        logger.debug("Run test: " + ConvertSmallCSVFileTest.class);
+        Stopwatch timer = Stopwatch.createStarted();
         JobExecution jobExecution = jobLauncherTestUtils.launchJob();
         Assert.assertEquals("COMPLETED", jobExecution.getExitStatus().getExitCode());
         logger.info("Compare files");
         logger.info(refResource.getFile().getAbsoluteFile());
         logger.info(resource.getFile().getAbsoluteFile());
         AssertFile.assertFileEquals(refResource, resource);
+        logger.debug("Test: " + ConvertSmallCSVFileTest.class + " succeed in " + timer.elapsed(TimeUnit.MILLISECONDS) + " milliseconds.");
     }
 }

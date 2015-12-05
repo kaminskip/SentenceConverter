@@ -1,4 +1,4 @@
-package pl.kaminski.sentencesconverter.writer;
+package pl.kaminski.sentencesconverter.writer.csv;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -16,14 +16,14 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
- * Created by Paweł Kamiński.
+ * Write header (Words numbered) in CSV output file
  */
 @Component
 public class CSVHeaderWriter implements InitializingBean {
 
     protected static final Log logger = LogFactory.getLog(CSVHeaderWriter.class);
 
-    @Value("${output.filename}")
+    @Value("${output.csv.filename}")
     private String outputFileName;
 
     @Autowired
@@ -70,7 +70,7 @@ public class CSVHeaderWriter implements InitializingBean {
     private String generateHeader(){
         return ", " + IntStream.range(0, context.getMaxWordsInSentence()).boxed()
                 .map(i -> ("Word " + (i + 1)))
-                .collect(Collectors.joining(", ")) + "\n";
+                .collect(Collectors.joining(", ")) + "\r\n";
     }
 
     /**

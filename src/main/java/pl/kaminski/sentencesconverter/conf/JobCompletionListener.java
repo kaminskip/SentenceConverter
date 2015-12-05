@@ -8,7 +8,7 @@ import org.springframework.batch.core.listener.JobExecutionListenerSupport;
 import org.springframework.stereotype.Component;
 
 /**
- * Created by Paweł Kamiński.
+ * Job listener for informing about completed job
  */
 @Component
 public class JobCompletionListener extends JobExecutionListenerSupport {
@@ -18,6 +18,8 @@ public class JobCompletionListener extends JobExecutionListenerSupport {
     @Override
     public void afterJob(JobExecution jobExecution) {
         if(jobExecution.getStatus() == BatchStatus.COMPLETED) {
+            log.info("Job started in: " + jobExecution.getStartTime());
+            log.info("Job finished at: " + jobExecution.getEndTime());
             log.info("JOB FINISHED!");
         }
     }

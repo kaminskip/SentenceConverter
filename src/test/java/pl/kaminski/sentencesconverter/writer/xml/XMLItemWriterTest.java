@@ -1,4 +1,4 @@
-package pl.kaminski.sentencesconverter.writer;
+package pl.kaminski.sentencesconverter.writer.xml;
 
 import com.google.common.base.Stopwatch;
 import org.apache.commons.logging.Log;
@@ -8,9 +8,11 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.batch.item.ExecutionContext;
+import org.springframework.batch.test.AssertFile;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import pl.kaminski.sentencesconverter.model.Sentence;
+import pl.kaminski.sentencesconverter.writer.csv.CSVItemWriter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,11 +25,11 @@ import static org.junit.Assert.*;
 /**
  * Created by Paweł Kamiński.
  */
-public class CSVItemWriterTest {
+public class XMLItemWriterTest {
 
-    private static final Log logger = LogFactory.getLog(CSVItemWriterTest.class);
+    private static final Log logger = LogFactory.getLog(XMLItemWriterTest.class);
 
-    private CSVItemWriter csvItemWriter;
+    private XMLItemWriter csvItemWriter;
 
     private Resource resource;
 
@@ -47,9 +49,9 @@ public class CSVItemWriterTest {
                 .addWord("Peter").addWord("called").addWord("for").addWord("the")
                 .addWord("wolf").addWord("and").addWord("Aesop").addWord("came").build();
 
-        csvItemWriter = new CSVItemWriter();
-        resource = new ClassPathResource("CSVItemWriterTest.out");
-        originalResource = new ClassPathResource("CSVItemWriterTest.original.out");
+        csvItemWriter = new XMLItemWriter();
+        resource = new ClassPathResource("XMLItemWriterTest.out");
+        originalResource = new ClassPathResource("XMLItemWriterTest.original.out");
         csvItemWriter.setResource(resource);
     }
 
@@ -60,15 +62,21 @@ public class CSVItemWriterTest {
 
     @Test
     public void testWrite() throws Exception {
-        logger.debug("Run test: " + CSVItemWriterTest.class);
+        logger.debug("Run test: " + XMLItemWriterTest.class);
         Stopwatch timer = Stopwatch.createStarted();
         List<Sentence> sentences = new ArrayList<>();
+
+
         csvItemWriter.open(new ExecutionContext());
         csvItemWriter.write(sentences);
         csvItemWriter.write(Stream.of(firstSentence, secondSentence).collect(Collectors.toList()));
         csvItemWriter.close();
-        Assert.assertSame(originalResource.contentLength(), resource.contentLength());
-        logger.debug("Write to file: " + resource.contentLength() + " B.");
-        logger.debug("Test: " + CSVItemWriterTest.class + " succeed in " + timer.elapsed(TimeUnit.MILLISECONDS) + " milliseconds.");
+
+        logger.info("Compare files");
+        logger.info(originalResource.getFile().getAbsoluteFile());
+        logger.info(resource.getFile().getAbsoluteFile());
+        AssertFile.assertFileEquals(originalResource, resource);
+
+        logger.debug("Test: " + XMLItemWriterTest.class + " succeed in " + timer.elapsed(TimeUnit.MILLISECONDS) + " milliseconds.");
     }
 }

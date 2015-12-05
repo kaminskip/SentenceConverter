@@ -8,10 +8,8 @@ import org.springframework.stereotype.Component;
 import pl.kaminski.sentencesconverter.context.ReadingSentencesContext;
 import pl.kaminski.sentencesconverter.model.Sentence;
 
-import java.util.List;
-
 /**
- * Created by Paweł Kamiński.
+ * Processor changing order in sentence object and persisting maximum words count
  */
 @Component
 public class SentenceProcessor implements ItemProcessor<Sentence, Sentence> {
@@ -24,7 +22,7 @@ public class SentenceProcessor implements ItemProcessor<Sentence, Sentence> {
     @Override
     public Sentence process(final Sentence sentence) throws Exception {
         readingSentencesContext.setSentenceWordsCount(sentence.getNumberOfWords());
-        log.info("Process sentence " + sentence.getSentenceNumber() + " with " + sentence.getNumberOfWords() + " words.");
+        log.debug("Process sentence " + sentence.getSentenceNumber() + " with " + sentence.getNumberOfWords() + " words.");
         sentence.orderWords();
         return sentence;
     }

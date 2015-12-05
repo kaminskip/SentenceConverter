@@ -5,26 +5,30 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
-import org.springframework.batch.core.launch.support.RunIdIncrementer;
-import org.springframework.batch.item.ItemProcessor;
-import org.springframework.batch.item.ItemReader;
-import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import pl.kaminski.sentencesconverter.model.Sentence;
-import pl.kaminski.sentencesconverter.writer.AddCSVHeaderToFileListener;
+import pl.kaminski.sentencesconverter.processor.SentenceProcessor;
+import pl.kaminski.sentencesconverter.reader.SentenceReader;
+import pl.kaminski.sentencesconverter.writer.csv.AddCSVHeaderToFileListener;
+import pl.kaminski.sentencesconverter.writer.csv.CSVItemWriter;
+import pl.kaminski.sentencesconverter.writer.xml.XMLItemWriter;
 
 /**
- * Created by Paweł Kamiński.
+ * Application configuration
  */
 @Configuration
 @EnableBatchProcessing
 public class AppConfiguration {
 
+    //Property from application.properties
     @Value("${output.type}")
-    private String outputType;
+    private String outputTypeParam;
+
+    //Selected output type, default CSV
+    OutputType outputType = OutputType.CSV;
 
     @Autowired
     private JobCompletionListener jobCompletionListener;
@@ -32,25 +36,77 @@ public class AppConfiguration {
     @Autowired
     private AddCSVHeaderToFileListener addCSVHeaderToFileListener;
 
+    @Autowired
+    private StepBuilderFactory stepBuilderFactory;
+
+    @Autowired
+    private SentenceReader sentenceReader;
+
+    @Autowired
+    private SentenceProcessor sentenceProcessor;
+
+    @Autowired
+    private CSVItemWriter csvItemWriter;
+
+    @Autowired
+    private XMLItemWriter xmlItemWriter;
+
+    private Step step;
+
     @Bean
-    public Job convertSentencesJob(JobBuilderFactory jobs, Step step) {
-        return jobs.get("convertSentencesJob")
-                .incrementer(new RunIdIncrementer())
-                .listener(addCSVHeaderToFileListener)
-                .listener(jobCompletionListener)
-                .flow(step)
-                .end()
-                .build();
+    public Job convertSentences(JobBuilderFactory jobs) {
+        setUpOutputStep();
+        if(this.outputType == OutputType.CSV){
+            return jobs.get("convertSentencesToCsvJob")
+                    .listener(addCSVHeaderToFileListener)
+                    .listener(jobCompletionListener)
+                    .flow(this.step)
+                    .end()
+                    .build();
+        } else {
+            return jobs.get("convertSentencesToCsvJob")
+                    .listener(jobCompletionListener)
+                    .flow(this.step)
+                    .end()
+                    .build();
+        }
+    }
+
+    /**
+     * Read application.properties and set up configured output
+     */
+    private void setUpOutputStep(){
+        this.outputType = OutputType.valueOf(this.outputTypeParam);
+        if(this.outputType == null){
+            throw new IllegalArgumentException(this.outputTypeParam + " is not recognized.");
+        }
+        switch (this.outputType){
+            case CSV: this.step = convertSentencesToCsvStep(); break;
+            case XML: this.step = convertSentencesToXmlStep(); break;
+        }
     }
 
     @Bean
-    public Step convertSentencesStep(StepBuilderFactory stepBuilderFactory, ItemReader<Sentence> reader, ItemProcessor<Sentence, Sentence> processor, ItemWriter<Sentence> writer) {
-        return stepBuilderFactory.get("convertSentencesStep")
+    public Step convertSentencesToCsvStep() {
+        return stepBuilderFactory.get("convertSentencesToCsvStep")
                 .<Sentence, Sentence> chunk(5)
-                .reader(reader)
-                .processor(processor)
-                .writer(writer)
+                .reader(sentenceReader)
+                .processor(sentenceProcessor)
+                .writer(csvItemWriter)
                 .build();
     }
 
+    @Bean
+    public Step convertSentencesToXmlStep() {
+        return stepBuilderFactory.get("convertSentencesToXmlStep")
+                .<Sentence, Sentence> chunk(5)
+                .reader(sentenceReader)
+                .processor(sentenceProcessor)
+                .writer(xmlItemWriter)
+                .build();
+    }
+
+    enum OutputType {
+        CSV, XML
+    }
 }

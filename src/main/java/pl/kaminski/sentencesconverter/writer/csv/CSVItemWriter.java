@@ -1,4 +1,4 @@
-package pl.kaminski.sentencesconverter.writer;
+package pl.kaminski.sentencesconverter.writer.csv;
 
 import org.springframework.batch.item.file.FlatFileItemWriter;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,14 +8,17 @@ import org.springframework.util.ClassUtils;
 import pl.kaminski.sentencesconverter.model.Sentence;
 
 /**
- * Created by Paweł Kamiński.
+ * CSV item writer, write sentences in csv
  */
 @Component
 public class CSVItemWriter extends FlatFileItemWriter<Sentence> {
 
-    @Value("${output.filename}")
+    @Value("${output.csv.filename}")
     private String outputFileName;
 
+    /**
+     * Create writer with predefined CSV line mapper
+     */
     public CSVItemWriter() {
         setExecutionContextName(ClassUtils.getShortName(CSVItemWriter.class));
         setLineAggregator(new CSVLineAggregator());

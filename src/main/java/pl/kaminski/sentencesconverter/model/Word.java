@@ -3,12 +3,13 @@ package pl.kaminski.sentencesconverter.model;
 import com.google.common.base.Preconditions;
 
 /**
- * Created by Paweł Kamiński.
+ * Word value object
  */
 public class Word implements Comparable<Word>{
 
     private String word;
 
+    //prevent instanced object
     private Word(Builder builder) {
         this.word = builder.word;
     }
@@ -23,6 +24,10 @@ public class Word implements Comparable<Word>{
         }
     }
 
+    /**
+     * Get string value of word
+     * @return string value
+     */
     public String getWord(){
         return this.word;
     }
@@ -32,6 +37,9 @@ public class Word implements Comparable<Word>{
         return this.word;
     }
 
+    /**
+     * Word value object builder
+     */
     public static class Builder {
 
         private String word;

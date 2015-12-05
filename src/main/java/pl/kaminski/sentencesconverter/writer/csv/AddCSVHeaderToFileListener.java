@@ -1,4 +1,4 @@
-package pl.kaminski.sentencesconverter.writer;
+package pl.kaminski.sentencesconverter.writer.csv;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

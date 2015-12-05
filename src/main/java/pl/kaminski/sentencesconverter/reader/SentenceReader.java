@@ -16,11 +16,10 @@ import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 import pl.kaminski.sentencesconverter.model.Sentence;
 
-import java.nio.charset.Charset;
 import java.util.Scanner;
 
 /**
- * Created by Paweł Kamiński.
+ * Read file form resource
  */
 @Component
 public class SentenceReader extends AbstractItemCountingItemStreamItemReader<Sentence> implements
@@ -32,23 +31,29 @@ public class SentenceReader extends AbstractItemCountingItemStreamItemReader<Sen
     private static final Log logger = LogFactory.getLog(SentenceReader.class);
 
     // default encoding for input files
-    public static final String DEFAULT_CHARSET = Charset.defaultCharset().name();
+    public static final String DEFAULT_CHARSET = "UTF-8";
 
-    /**
-     * Dot delimiter to split text into sentences
-     */
-    public static final String DOT = "(?<!Mr)\\.|!|\\?";
-
+    // file encoding
     private String encoding = DEFAULT_CHARSET;
 
+    // dot regexp delimiter to split text into sentences
+    public static final String DOT = "(?<!Mr)\\.|!|\\?";
+
+    // scanner for looking for the sentences
     private Scanner scanner;
 
+    // input file resource with sentences
     private Resource resource;
 
+    // count sentences
     private int lineCount = 0;
 
+    // empty resource
     private boolean noInput = false;
 
+    /**
+     * Create sentence reader
+     */
     public SentenceReader() {
         setName(ClassUtils.getShortName(SentenceReader.class));
     }

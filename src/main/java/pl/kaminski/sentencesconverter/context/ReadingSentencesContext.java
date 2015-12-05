@@ -3,7 +3,7 @@ package pl.kaminski.sentencesconverter.context;
 import org.springframework.stereotype.Component;
 
 /**
- * Created by Paweł Kamiński.
+ * Application context for persisting actual max words in sentence of processed sentences
  */
 @Component
 public class ReadingSentencesContext {

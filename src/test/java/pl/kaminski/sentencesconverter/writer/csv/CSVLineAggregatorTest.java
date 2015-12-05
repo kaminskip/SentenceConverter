@@ -1,4 +1,4 @@
-package pl.kaminski.sentencesconverter.writer;
+package pl.kaminski.sentencesconverter.writer.csv;
 
 import com.google.common.base.Stopwatch;
 import org.apache.commons.logging.Log;
@@ -7,11 +7,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import pl.kaminski.sentencesconverter.model.Sentence;
-import pl.kaminski.sentencesconverter.reader.SentenceMapper;
 
 import java.util.concurrent.TimeUnit;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by Paweł Kamiński.
