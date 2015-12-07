@@ -2,8 +2,6 @@ package pl.kaminski.sentencesconverter;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 /**
  * Test for Application main class
  */
