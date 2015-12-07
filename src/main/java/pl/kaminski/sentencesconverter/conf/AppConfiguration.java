@@ -17,7 +17,7 @@ import pl.kaminski.sentencesconverter.writer.csv.CSVItemWriter;
 import pl.kaminski.sentencesconverter.writer.xml.XMLItemWriter;
 
 /**
- * Application configuration
+ * Spring application configuration
  */
 @Configuration
 @EnableBatchProcessing
