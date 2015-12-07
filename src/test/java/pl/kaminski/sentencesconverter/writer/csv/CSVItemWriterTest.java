@@ -4,7 +4,6 @@ import com.google.common.base.Stopwatch;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.batch.item.ExecutionContext;
@@ -37,8 +36,6 @@ public class CSVItemWriterTest {
 
     private Sentence secondSentence;
 
-    private ReadingSentencesContext context;
-
     @Before
     public void setUp() throws Exception {
         firstSentence = new Sentence.Builder(1)
@@ -53,7 +50,7 @@ public class CSVItemWriterTest {
         resource = new ClassPathResource("CSVItemWriterTest.out");
         originalResource = new ClassPathResource("CSVItemWriterTest.original.out");
         csvItemWriter.setResource(resource);
-        context = new ReadingSentencesContext();
+        ReadingSentencesContext context = new ReadingSentencesContext();
         context.setSentenceWordsCount(8);
         csvItemWriter.setContext(context);
     }

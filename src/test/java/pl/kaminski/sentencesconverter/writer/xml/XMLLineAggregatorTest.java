@@ -7,11 +7,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import pl.kaminski.sentencesconverter.model.Sentence;
-import pl.kaminski.sentencesconverter.writer.csv.CSVLineAggregator;
 
 import java.util.concurrent.TimeUnit;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by Paweł Kamiński.

@@ -16,8 +16,6 @@ import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 import pl.kaminski.sentencesconverter.model.Sentence;
 
-import java.io.IOException;
-import java.nio.file.Path;
 import java.util.Scanner;
 
 /**

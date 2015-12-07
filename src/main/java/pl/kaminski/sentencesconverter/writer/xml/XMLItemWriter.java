@@ -1,11 +1,15 @@
 package pl.kaminski.sentencesconverter.writer.xml;
 
+import org.springframework.batch.item.file.FlatFileHeaderCallback;
 import org.springframework.batch.item.file.FlatFileItemWriter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ClassUtils;
 import pl.kaminski.sentencesconverter.model.Sentence;
+
+import java.io.IOException;
+import java.io.Writer;
 
 /**
  * XML item writer, write sentences in xml

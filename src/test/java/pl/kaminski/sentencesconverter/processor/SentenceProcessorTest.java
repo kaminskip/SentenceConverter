@@ -6,11 +6,9 @@ import org.apache.commons.logging.LogFactory;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import pl.kaminski.sentencesconverter.context.ReadingSentencesContext;
 import pl.kaminski.sentencesconverter.model.Sentence;
 import pl.kaminski.sentencesconverter.model.Word;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 

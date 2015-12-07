@@ -8,12 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 import pl.kaminski.sentencesconverter.model.Word;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
-
-import static org.junit.Assert.*;
 
 /**
  * Sentence mapper test
@@ -37,7 +32,7 @@ public class SentenceMapperTest {
         logger.debug("Run test: " + SentenceMapperTest.class);
         SentenceMapper sentenceMapper = new SentenceMapper();
         Stopwatch timer = Stopwatch.createStarted();
-        String[] strings = sentenceMapper.mapLine(sampleText, 1).getWords().stream().map(w -> w.getWord()).toArray(size -> new String[size]);
+        String[] strings = sentenceMapper.mapLine(sampleText, 1).getWords().stream().map(Word::getWord).toArray(String[]::new);
         timer.stop();
         Assert.assertArrayEquals(expectedStrings, strings);
         logger.debug("Test: " + SentenceMapperTest.class + " succeed in " + timer.elapsed(TimeUnit.MILLISECONDS) + " milliseconds.");

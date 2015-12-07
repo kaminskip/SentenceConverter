@@ -4,7 +4,6 @@ import com.google.common.base.Stopwatch;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.batch.item.ExecutionContext;
@@ -12,15 +11,12 @@ import org.springframework.batch.test.AssertFile;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import pl.kaminski.sentencesconverter.model.Sentence;
-import pl.kaminski.sentencesconverter.writer.csv.CSVItemWriter;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by Paweł Kamiński.

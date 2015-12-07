@@ -33,6 +33,6 @@ public class Application {
     private static void showJVMParams(){
         RuntimeMXBean runtimeMxBean = ManagementFactory.getRuntimeMXBean();
         log.info("JVM params");
-        runtimeMxBean.getInputArguments().stream().forEach(param -> log.info(param));
+        runtimeMxBean.getInputArguments().stream().forEach(log::info);
     }
 }
