@@ -1,6 +1,6 @@
 ## Synopsis
 
-Java Coding Assignment for Nordea Markets. Program for converting text into XML or CSV. Text file is broken into sentences 
+Program for converting text into XML or CSV. Text file is broken into sentences 
 and words and words are sorted. 
 
 ## Motivation
